@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sphere babylon</title>
+</head>
+<body>
+    <canvas id = "render-canvas"></canvas>
+    <!-- Стили для холста СSS -->
+    <style>
+        body, #render-canvas {
+            margin: 0;
+            width: 100%;
+            height: 100vh;
+        }
+    </style>
+    <!-- подключаем движок и билиотеку babylonjs -->
+    <script src = "https://cdn.babylonjs.com/babylon.js"></script>
+    <script>
+        // извлекаем тэг 'render-canvas' из вёрстки
+        let canvas = window.document.querySelector('#render-canvas');
+        // Создание движка
+        let engine = new BABYLON.Engine(canvas, true);
+        // Создание сцены и присоединение ее к движку
+        let scene = new BABYLON.Scene(engine);
+        scene.clearColor = new BABYLON.Color3(0.2, 0,2, 0.2);
+        // Создание камеры
+        let camera = new BABYLON.FreeCamera('camera', new BABYLON.Vector3(0, 0, -10), scene);
+        camera.setTarget(BABYLON.Vector3.Zero());
+        scene.createDefaultCameraOrLight(true, true, true);
+        // Создание света
+        let light = new BABYLON.PointLight('light', new BABYLON.Vector3(10,10,10), scene)
+        // Движок
+        engine.runRenderLoop(function () {
+            scene.render();
+        });
+        // Создание сферы
+        const sphere = BABYLON.MeshBuilder.CreateSphere("sphere",{ size: 4}, scene);
+        // Перемещение сферы
+        sphere.position = new BABYLON.Vector3(0, 0, 5); 
+        // Применяем материал к сфере
+        let material = new BABYLON.StandardMaterial("material", scene);
+        sphere.material = material;
+
+        window.addEventListener('resize', function () {
+        engine.resize();
+        });
+
+        window.addEventListener('touchend', () =>{
+            sphere.position.y -= 0.1;
+            sphere.rotation.x += 0.1;
+        });
+    </script>
+</body>
+</html>
